@@ -2,9 +2,17 @@ import 'dart:async';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Tetris',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -330,124 +339,122 @@ class _TetrisGameState extends State<TetrisGame>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('TETRIS', style: GoogleFonts.pressStart2p(fontSize: 24)),
-      //   centerTitle: true,
-      //   backgroundColor: const Color(0xFF34495E),
-      // ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF2C3E50), Color(0xFF34495E)],
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('SCORE',
-                          style: GoogleFonts.roboto(
-                              fontSize: 18, color: Colors.white70)),
-                      Text('$score',
-                          style: GoogleFonts.pressStart2p(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('NEXT',
-                          style: GoogleFonts.roboto(
-                              fontSize: 18, color: Colors.white70)),
-                      const Padding(padding: const EdgeInsets.only(top: 8)),
-                      buildNextPiecePreview(),
-                    ],
-                  ),
-                ],
-              ),
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF2C3E50), Color(0xFF34495E)],
             ),
-            Expanded(
-              child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white30, width: 2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('SCORE',
+                            style: GoogleFonts.roboto(
+                                fontSize: 18, color: Colors.white70)),
+                        Text('$score',
+                            style: GoogleFonts.pressStart2p(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('NEXT',
+                            style: GoogleFonts.roboto(
+                                fontSize: 18, color: Colors.white70)),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        buildNextPiecePreview(),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Center(
                   child: AspectRatio(
                     aspectRatio: cols / rows,
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: rows * cols,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: cols,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white30, width: 2),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      itemBuilder: (context, index) {
-                        int row = index ~/ cols;
-                        int col = index % cols;
-                        int cellValue = board[row][col];
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: rows * cols,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: cols,
+                        ),
+                        itemBuilder: (context, index) {
+                          int row = index ~/ cols;
+                          int col = index % cols;
+                          int cellValue = board[row][col];
 
-                        if (row >= currentPieceRow &&
-                            row < currentPieceRow + currentPiece.length &&
-                            col >= currentPieceCol &&
-                            col < currentPieceCol + currentPiece[0].length) {
-                          if (currentPiece[row - currentPieceRow]
-                                  [col - currentPieceCol] !=
-                              0) {
-                            cellValue = currentColorIndex + 1;
+                          if (row >= currentPieceRow &&
+                              row < currentPieceRow + currentPiece.length &&
+                              col >= currentPieceCol &&
+                              col < currentPieceCol + currentPiece[0].length) {
+                            if (currentPiece[row - currentPieceRow]
+                                    [col - currentPieceCol] !=
+                                0) {
+                              cellValue = currentColorIndex + 1;
+                            }
                           }
-                        }
 
-                        return Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            color: cellValue == 0
-                                ? Colors.transparent
-                                : pieceColors[cellValue - 1],
-                          ),
-                        );
-                      },
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black12),
+                              color: cellValue == 0
+                                  ? Colors.transparent
+                                  : pieceColors[cellValue - 1],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildControlButton(Icons.rotate_left, rotate, 'Rotate'),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          _buildControlButton(
-                              Icons.arrow_left, moveLeft, 'Left'),
-                          const SizedBox(width: 10),
-                          _buildControlButton(
-                              Icons.arrow_right, moveRight, 'Right'),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      _buildControlButton(Icons.arrow_drop_down, drop, 'Drop'),
-                    ],
-                  ),
-                  _buildControlButton(Icons.rotate_right, rotate, 'Rotate'),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildControlButton(Icons.rotate_left, rotate, 'Rotate'),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            _buildControlButton(
+                                Icons.arrow_left, moveLeft, 'Left'),
+                            const SizedBox(width: 10),
+                            _buildControlButton(
+                                Icons.arrow_right, moveRight, 'Right'),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        _buildControlButton(
+                            Icons.arrow_drop_down, drop, 'Drop'),
+                      ],
+                    ),
+                    _buildControlButton(Icons.rotate_right, rotate, 'Rotate'),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
