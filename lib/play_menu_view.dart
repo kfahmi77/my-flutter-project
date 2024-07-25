@@ -5,6 +5,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'helpers/database_helper.dart';
+import 'models/leader_board_model.dart';
+
 class PlayMenuView extends StatefulWidget {
   const PlayMenuView({super.key});
 
@@ -275,33 +278,60 @@ class _PlayMenuViewState extends State<PlayMenuView>
     );
   }
 
-  void showGameOverDialog() {
+   void showGameOverDialog() {
     playGameOverSound();
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        String playerName = '';
         return AlertDialog(
           title: Text('GAME OVER', style: GoogleFonts.pressStart2p()),
-          content: Text('Your score: $score',
-              style: GoogleFonts.roboto(fontSize: 18)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Your score: $score',
+                  style: GoogleFonts.roboto(fontSize: 18, color: Colors.white)),
+              const SizedBox(height: 20),
+              TextField(
+                style: GoogleFonts.roboto(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Enter your name',
+                  hintStyle: GoogleFonts.roboto(color: Colors.white70),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white70),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
+                onChanged: (value) {
+                  playerName = value;
+                },
+              ),
+            ],
+          ),
           backgroundColor: const Color(0xFF34495E),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           actions: <Widget>[
             TextButton(
-              child: Text('RESTART',
+              child: Text('SAVE & RESTART',
                   style: GoogleFonts.roboto(color: Colors.white)),
-              onPressed: () {
+              onPressed: () async {
+                if (playerName.isNotEmpty) {
+                  await DatabaseHelper.instance.insertEntry(
+                    LeaderboardEntry(name: playerName, score: score)
+                  );
+                }
                 Navigator.of(context).pop();
                 startGame();
               },
             ),
             TextButton(
-              child:
-                  Text('EXIT', style: GoogleFonts.roboto(color: Colors.white)),
+              child: Text('EXIT', style: GoogleFonts.roboto(color: Colors.white)),
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Exit to main menu
               },
             ),
           ],

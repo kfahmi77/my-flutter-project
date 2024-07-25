@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LeaderboardView extends StatelessWidget {
+import 'helpers/database_helper.dart';
+import 'models/leader_board_model.dart';
+
+class LeaderboardView extends StatefulWidget {
   const LeaderboardView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Dummy data untuk leaderboard
-    final List<Map<String, dynamic>> leaderboardData = [
-      {'rank': 1, 'name': 'Alex', 'score': 10000},
-      {'rank': 2, 'name': 'Beth', 'score': 9500},
-      {'rank': 3, 'name': 'Charlie', 'score': 9000},
-      {'rank': 4, 'name': 'David', 'score': 8500},
-      {'rank': 5, 'name': 'Emma', 'score': 8000},
-      {'rank': 6, 'name': 'Frank', 'score': 7500},
-      {'rank': 7, 'name': 'Grace', 'score': 7000},
-      {'rank': 8, 'name': 'Henry', 'score': 6500},
-      {'rank': 9, 'name': 'Ivy', 'score': 6000},
-      {'rank': 10, 'name': 'Jack', 'score': 5500},
-    ];
+  createState() => _LeaderboardViewState();
+}
 
+class _LeaderboardViewState extends State<LeaderboardView> {
+  List<LeaderboardEntry> leaderboardData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLeaderboardData();
+  }
+
+  Future<void> _loadLeaderboardData() async {
+    final entries = await DatabaseHelper.instance.getTopEntries();
+    setState(() {
+      leaderboardData = entries;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -41,12 +50,14 @@ class LeaderboardView extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    Text(
-                      'LEADERBOARD',
-                      style: GoogleFonts.pressStart2p(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Center(
+                      child: Text(
+                        'LEADERBOARD',
+                        style: GoogleFonts.pressStart2p(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 48), // untuk menyeimbangkan layout
@@ -58,13 +69,13 @@ class LeaderboardView extends StatelessWidget {
                   itemCount: leaderboardData.length,
                   itemBuilder: (context, index) {
                     final entry = leaderboardData[index];
-                    final isTopThree = entry['rank'] <= 3;
+                    final isTopThree = index < 3;
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: isTopThree
-                            ? _getColorForRank(entry['rank'])
+                            ? _getColorForRank(index + 1)
                             : Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -72,15 +83,15 @@ class LeaderboardView extends StatelessWidget {
                         leading: CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Text(
-                            '${entry['rank']}',
+                            '${index + 1}',
                             style: GoogleFonts.roboto(
-                              color: _getColorForRank(entry['rank']),
+                              color: _getColorForRank(index + 1),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         title: Text(
-                          entry['name'],
+                          entry.name,
                           style: GoogleFonts.roboto(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -88,7 +99,7 @@ class LeaderboardView extends StatelessWidget {
                           ),
                         ),
                         trailing: Text(
-                          '${entry['score']}',
+                          '${entry.score}',
                           style: GoogleFonts.pressStart2p(
                             color: Colors.white,
                             fontSize: 16,
