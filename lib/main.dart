@@ -61,6 +61,15 @@ class MainMenuPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                 Text(
+                  'Build ❤️ Flutter ',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.pressStart2p(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                  ),
+                ),
                 const SizedBox(height: 60),
                 _buildMenuButton(
                     "Play Game", () => Navigator.pushNamed(context, '/game')),

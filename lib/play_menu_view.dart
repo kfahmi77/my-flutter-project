@@ -145,10 +145,11 @@ class _PlayMenuViewState extends State<PlayMenuView>
     }
   }
 
-  bool isValidMove(int row, int col) {
-    for (int i = 0; i < currentPiece.length; i++) {
-      for (int j = 0; j < currentPiece[i].length; j++) {
-        if (currentPiece[i][j] != 0) {
+  bool isValidMove(int row, int col, [List<List<int>>? piece]) {
+    piece = piece ?? currentPiece;
+    for (int i = 0; i < piece.length; i++) {
+      for (int j = 0; j < piece[i].length; j++) {
+        if (piece[i][j] != 0) {
           if (row + i >= rows ||
               col + j < 0 ||
               col + j >= cols ||
@@ -159,6 +160,34 @@ class _PlayMenuViewState extends State<PlayMenuView>
       }
     }
     return true;
+  }
+
+  bool tryWallKick(List<List<int>> rotatedPiece) {
+    // Original position
+    if (isValidMove(currentPieceRow, currentPieceCol, rotatedPiece)) {
+      return true;
+    }
+
+    // Try to move right
+    if (isValidMove(currentPieceRow, currentPieceCol + 1, rotatedPiece)) {
+      currentPieceCol++;
+      return true;
+    }
+
+    // Try to move left
+    if (isValidMove(currentPieceRow, currentPieceCol - 1, rotatedPiece)) {
+      currentPieceCol--;
+      return true;
+    }
+
+    // Try to move up (for I piece mostly)
+    if (isValidMove(currentPieceRow - 1, currentPieceCol, rotatedPiece)) {
+      currentPieceRow--;
+      return true;
+    }
+
+    // If all fails, return false
+    return false;
   }
 
   void update() {
@@ -229,7 +258,7 @@ class _PlayMenuViewState extends State<PlayMenuView>
           (j) => currentPiece[currentPiece.length - 1 - j][i]),
     );
 
-    if (isValidMove(currentPieceRow, currentPieceCol)) {
+    if (tryWallKick(rotatedPiece)) {
       setState(() {
         currentPiece = rotatedPiece;
       });
@@ -278,7 +307,7 @@ class _PlayMenuViewState extends State<PlayMenuView>
     );
   }
 
-   void showGameOverDialog() {
+  void showGameOverDialog() {
     playGameOverSound();
     showDialog(
       context: context,
@@ -312,7 +341,8 @@ class _PlayMenuViewState extends State<PlayMenuView>
             ],
           ),
           backgroundColor: const Color(0xFF34495E),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           actions: <Widget>[
             TextButton(
               child: Text('SAVE & RESTART',
@@ -320,15 +350,15 @@ class _PlayMenuViewState extends State<PlayMenuView>
               onPressed: () async {
                 if (playerName.isNotEmpty) {
                   await DatabaseHelper.instance.insertEntry(
-                    LeaderboardEntry(name: playerName, score: score)
-                  );
+                      LeaderboardEntry(name: playerName, score: score));
                 }
                 Navigator.of(context).pop();
                 startGame();
               },
             ),
             TextButton(
-              child: Text('EXIT', style: GoogleFonts.roboto(color: Colors.white)),
+              child:
+                  Text('EXIT', style: GoogleFonts.roboto(color: Colors.white)),
               onPressed: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop(); // Exit to main menu
