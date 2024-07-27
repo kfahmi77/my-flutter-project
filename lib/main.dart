@@ -1,9 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'leaderboard_view.dart';
-import 'play_menu_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,86 +18,123 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Tetris',
+      title: 'WordPuzzleMaster',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.red,
+        scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const MainMenuPage(),
-        '/game': (context) => const PlayMenuView(),
-        '/leaderboard': (context) => const LeaderboardView(),
-      },
+      home: WordPuzzlePage(),
     );
   }
 }
 
-class MainMenuPage extends StatelessWidget {
-  const MainMenuPage({super.key});
+class WordPuzzlePage extends StatefulWidget {
+  const WordPuzzlePage({super.key});
+
+  @override
+  _WordPuzzlePageState createState() => _WordPuzzlePageState();
+}
+
+class _WordPuzzlePageState extends State<WordPuzzlePage> {
+  final List<String> puzzleWords = ['APPLE', 'BEACH', 'CHAIR', 'DANCE', 'EAGLE'];
+  late String currentWord;
+  late List<String> shuffledLetters;
+  final TextEditingController _guessController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    selectNewWord();
+  }
+
+  void selectNewWord() {
+    currentWord = puzzleWords[Random().nextInt(puzzleWords.length)];
+    shuffledLetters = currentWord.split('')..shuffle();
+    _guessController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF2C3E50), Color(0xFF34495E)],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      appBar: AppBar(
+        title: Text('WordPuzzleMaster'),
+        backgroundColor: Colors.red,
+        leading: Icon(Icons.home),
+        actions: [
+          Icon(Icons.settings),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.grey[200],
+              child: Column(
+                children: [
+                  Text('Puzzle Board', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: shuffledLetters.map((letter) => Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        color: Colors.white,
+                      ),
+                      child: Center(child: Text(letter, style: TextStyle(fontSize: 24))),
+                    )).toList(),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _guessController,
+              decoration: InputDecoration(
+                hintText: 'Guess the word',
+                border: OutlineInputBorder(),
+                fillColor: Colors.grey[200],
+                filled: true,
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  'TETRIS',
-                  style: GoogleFonts.pressStart2p(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                ElevatedButton(
+                  child: Text('HINT'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('First letter is ${currentWord[0]}')),
+                    );
+                  },
                 ),
-                 Text(
-                  'Build ❤️ Flutter ',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.pressStart2p(
-                    fontSize: 18,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white,
-                  ),
+                ElevatedButton(
+                  child: Text('SUBMIT'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () {
+                    if (_guessController.text.toUpperCase() == currentWord) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Correct! Well done!')),
+                      );
+                      setState(() {
+                        selectNewWord();
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Incorrect. Try again!')),
+                      );
+                    }
+                  },
                 ),
-                const SizedBox(height: 60),
-                _buildMenuButton(
-                    "Play Game", () => Navigator.pushNamed(context, '/game')),
-                const SizedBox(height: 20),
-                _buildMenuButton(
-                    "Leaderboard", () => Navigator.pushNamed(context, '/leaderboard')),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMenuButton(String text, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF3498DB),
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-      ),
-      child: Text(
-        text,
-        style: GoogleFonts.roboto(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+          ],
         ),
       ),
     );
