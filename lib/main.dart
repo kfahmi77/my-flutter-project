@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.red,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: WordPuzzlePage(),
+      home: const WordPuzzlePage(),
     );
   }
 }
@@ -33,7 +33,7 @@ class WordPuzzlePage extends StatefulWidget {
   const WordPuzzlePage({super.key});
 
   @override
-  _WordPuzzlePageState createState() => _WordPuzzlePageState();
+   createState() => _WordPuzzlePageState();
 }
 
 class _WordPuzzlePageState extends State<WordPuzzlePage> {
