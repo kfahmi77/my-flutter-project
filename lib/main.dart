@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -29,114 +30,125 @@ class MyApp extends StatelessWidget {
 }
 
 class WordPuzzlePage extends StatefulWidget {
-  const WordPuzzlePage({super.key});
-
   @override
   _WordPuzzlePageState createState() => _WordPuzzlePageState();
 }
 
 class _WordPuzzlePageState extends State<WordPuzzlePage> {
-  final List<String> puzzleWords = ['APPLE', 'BEACH', 'CHAIR', 'DANCE', 'EAGLE'];
-  late String currentWord;
-  late List<String> shuffledLetters;
+  List<Map<String, dynamic>> puzzleWords = [];
+  Map<String, dynamic> currentWordData = {};
+  List<String> shuffledLetters = [];
   final TextEditingController _guessController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    selectNewWord();
+    loadJsonData();
+  }
+
+  Future<void> loadJsonData() async {
+    String jsonString = await rootBundle.loadString('assets/jsons/word_data.json');
+    List<dynamic> jsonData = json.decode(jsonString);
+    setState(() {
+      puzzleWords = List<Map<String, dynamic>>.from(jsonData);
+      selectNewWord();
+    });
   }
 
   void selectNewWord() {
-    currentWord = puzzleWords[Random().nextInt(puzzleWords.length)];
-    shuffledLetters = currentWord.split('')..shuffle();
-    _guessController.clear();
+    if (puzzleWords.isNotEmpty) {
+      currentWordData = puzzleWords[Random().nextInt(puzzleWords.length)];
+      shuffledLetters = currentWordData['word'].toString().split('')..shuffle();
+      _guessController.clear();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('WordPuzzleMaster'),
+        title: const Text('WordPuzzleMaster'),
         backgroundColor: Colors.red,
-        leading: Icon(Icons.home),
-        actions: [
+        leading: const Icon(Icons.home),
+        actions: const [
           Icon(Icons.settings),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.grey[200],
+      body: puzzleWords.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Text('Puzzle Board', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    color: Colors.grey[200],
+                    child: Column(
+                      children: [
+                        const Text('Puzzle Board', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: shuffledLetters.map((letter) => Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              color: Colors.white,
+                            ),
+                            child: Center(child: Text(letter, style: const TextStyle(fontSize: 24))),
+                          )).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: _guessController,
+                    decoration: InputDecoration(
+                      hintText: 'Guess the word',
+                      border: const OutlineInputBorder(),
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: shuffledLetters.map((letter) => Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        color: Colors.white,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(currentWordData['hint'].toString())),
+                          );
+                        },
+                        child: const Text('HINT'),
                       ),
-                      child: Center(child: Text(letter, style: TextStyle(fontSize: 24))),
-                    )).toList(),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                        onPressed: () {
+                          if (_guessController.text.toUpperCase() == currentWordData['word'].toString().toUpperCase()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Correct! Well done!')),
+                            );
+                            setState(() {
+                              selectNewWord();
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Incorrect. Try again!')),
+                            );
+                          }
+                        },
+                        child: const Text('SUBMIT'),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            TextField(
-              controller: _guessController,
-              decoration: InputDecoration(
-                hintText: 'Guess the word',
-                border: OutlineInputBorder(),
-                fillColor: Colors.grey[200],
-                filled: true,
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  child: Text('HINT'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('First letter is ${currentWord[0]}')),
-                    );
-                  },
-                ),
-                ElevatedButton(
-                  child: Text('SUBMIT'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {
-                    if (_guessController.text.toUpperCase() == currentWord) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Correct! Well done!')),
-                      );
-                      setState(() {
-                        selectNewWord();
-                      });
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Incorrect. Try again!')),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
