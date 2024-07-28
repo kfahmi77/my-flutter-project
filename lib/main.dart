@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
 }
 
 class WordPuzzlePage extends StatefulWidget {
+  const WordPuzzlePage({super.key});
+
   @override
   _WordPuzzlePageState createState() => _WordPuzzlePageState();
 }
