@@ -24,6 +24,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
   final TextEditingController _guessController = TextEditingController();
 
   int score = 0;
+  int health = 3; // New: Initial health
   String hintText = '';
 
   late AnimationController _controller;
@@ -85,6 +86,44 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
     } else {
       _showCustomSnackBar('Incorrect. Try again!', Colors.red);
     }
+  }
+
+  // New: Skip word function
+  void skipWord() {
+    if (health > 0) {
+      setState(() {
+        health--;
+      });
+      _showCustomSnackBar('Word skipped. Health decreased!', Colors.orange);
+      selectNewWord();
+    } else {
+      _showGameOverDialog();
+    }
+  }
+
+  // New: Game over dialog
+  void _showGameOverDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Game Over'),
+        content: Text('Your final score is $score.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              dbHelper.insertScore(score);
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Return to previous screen
+            },
+            child: const Text('OK', style: TextStyle(color: Color(0xFFFF6B6B))),
+          ),
+        ],
+        backgroundColor: const Color(0xFF2D2D44),
+        elevation: 10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+    );
   }
 
   void _showCustomSnackBar(String message, Color color) {
@@ -182,6 +221,27 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            // New: Health display
+            Center(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: List.generate(
+                    3,
+                    (index) => Icon(
+                      index < health ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -303,6 +363,22 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                                   borderRadius: BorderRadius.circular(15)),
                             ),
                             onPressed: checkAnswer,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        // New: Skip button
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.skip_next),
+                            label: const Text('SKIP'),
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                            ),
+                            onPressed: skipWord,
                           ),
                         ),
                       ],
