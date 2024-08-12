@@ -143,13 +143,16 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
     return (await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Kamu yakin'),
-            content:
-                const Text('Apakah kamu ingin keluar dari permainan ini?'),
+            title: const Text('Kamu yakin',
+                style: TextStyle(color: Color(0xFFFF6B6B))),
+            content: const Text(
+              'Apakah kamu ingin keluar dari permainan ini?',
+              style: TextStyle(color: Colors.white),
+            ),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Ya',
+                child: const Text('Tidak',
                     style: TextStyle(color: Color(0xFFFF6B6B))),
               ),
               TextButton(
@@ -157,7 +160,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                   dbHelper.insertScore(score);
                   Navigator.of(context).pop(true);
                 },
-                child: const Text('Tidak',
+                child: const Text('Ya',
                     style: TextStyle(color: Color(0xFFFF6B6B))),
               ),
             ],
@@ -216,7 +219,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  'Score: $score',
+                  'Skor: $score',
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -314,7 +317,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                           showCursor: _isEditing,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
-                            hintText: 'Tap to guess the word',
+                            hintText: 'Ketik disini...',
                             hintStyle:
                                 TextStyle(color: Colors.white.withOpacity(0.5)),
                             filled: true,
@@ -335,7 +338,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                         Expanded(
                           child: ElevatedButton.icon(
                             icon: const Icon(Icons.lightbulb),
-                            label: const Text('HINT'),
+                            label: const Text('PETUNJUK'),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.orange,
@@ -345,7 +348,8 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                             ),
                             onPressed: () {
                               setState(() {
-                                hintText = "\"${currentWordData['hint'].toString()}\"";
+                                hintText =
+                                    "\"${currentWordData['hint'].toString()}\"";
                               });
                             },
                           ),
@@ -354,7 +358,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                         Expanded(
                           child: ElevatedButton.icon(
                             icon: const Icon(Icons.check),
-                            label: const Text('SUBMIT'),
+                            label: const Text('JAWAB'),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: const Color(0xFFFF6B6B),
@@ -370,7 +374,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                         Expanded(
                           child: ElevatedButton.icon(
                             icon: const Icon(Icons.skip_next),
-                            label: const Text('SKIP'),
+                            label: const Text('LEWATI'),
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
