@@ -81,10 +81,10 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
       setState(() {
         score += 10;
       });
-      _showCustomSnackBar('Correct! Well done!', Colors.green);
+      _showCustomSnackBar('Jawaban benar :)', Colors.green);
       selectNewWord();
     } else {
-      _showCustomSnackBar('Incorrect. Try again!', Colors.red);
+      _showCustomSnackBar('Jawaban salah :(', Colors.red);
     }
   }
 
@@ -94,7 +94,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
       setState(() {
         health--;
       });
-      _showCustomSnackBar('Word skipped. Health decreased!', Colors.orange);
+      _showCustomSnackBar('Soal dilewati,Nyawa berkurang', Colors.orange);
       selectNewWord();
     } else {
       _showGameOverDialog();
@@ -108,7 +108,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: const Text('Game Over'),
-        content: Text('Your final score is $score.'),
+        content: Text('Skor terakhirmu $score.'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -143,13 +143,13 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
     return (await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Are you sure?'),
+            title: const Text('Kamu yakin'),
             content:
-                const Text('Do you want to exit the game and save your score?'),
+                const Text('Apakah kamu ingin keluar dari permainan ini?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('No',
+                child: const Text('Ya',
                     style: TextStyle(color: Color(0xFFFF6B6B))),
               ),
               TextButton(
@@ -157,7 +157,7 @@ class _WordPuzzlePageState extends State<WordPuzzlePage>
                   dbHelper.insertScore(score);
                   Navigator.of(context).pop(true);
                 },
-                child: const Text('Yes',
+                child: const Text('Tidak',
                     style: TextStyle(color: Color(0xFFFF6B6B))),
               ),
             ],

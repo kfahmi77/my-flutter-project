@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'WordPuzzleMaster',
+      title: 'Teka TekiKu',
       theme: ThemeData(
         primaryColor: Colors.red,
         scaffoldBackgroundColor: Colors.white,
@@ -47,7 +47,7 @@ class MainMenuPage extends StatelessWidget {
                 const AnimatedTitle(),
                 const SizedBox(height: 50),
                 MenuButton(
-                  title: 'Play Game',
+                  title: 'Main',
                   icon: Icons.play_arrow,
                   onPressed: () {
                     Navigator.push(
@@ -58,7 +58,7 @@ class MainMenuPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 MenuButton(
-                  title: 'High Scores',
+                  title: 'Skor tertinggi',
                   icon: Icons.emoji_events,
                   onPressed: () {
                     Navigator.push(
@@ -69,10 +69,27 @@ class MainMenuPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 MenuButton(
-                  title: 'Settings',
+                  title: 'Pengaturan',
                   icon: Icons.settings,
                   onPressed: () {
-                    // TODO: Implement settings page
+                   //buat dialog sedang dalam pengembangan
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Pengaturan'),
+                          content: const Text('Sedang dalam pengembangan'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],
@@ -85,7 +102,7 @@ class MainMenuPage extends StatelessWidget {
 }
 
 class AnimatedTitle extends StatelessWidget {
-  const AnimatedTitle({Key? key}) : super(key: key);
+  const AnimatedTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +121,7 @@ class AnimatedTitle extends StatelessWidget {
       child: const Column(
         children: [
           Text(
-            'WordPuzzle',
+            'Teka Teki',
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.bold,
@@ -119,7 +136,7 @@ class AnimatedTitle extends StatelessWidget {
             ),
           ),
           Text(
-            'Master',
+            'Ku',
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w300,

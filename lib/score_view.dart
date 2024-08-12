@@ -12,8 +12,8 @@ class HighscorePage extends StatelessWidget {
       backgroundColor: const Color(0xFF1E1E2C),
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        title: const Text('Highscores', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF2D2D44),
+        title: const Text('Skor Tertinggi', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: const Color.fromARGB(255, 246, 246, 249),
         elevation: 0,
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -34,7 +34,7 @@ class HighscorePage extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Center(
                     child: Text(
-                      'Top Scores',
+                      'Skor Tertinggi',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -112,7 +112,7 @@ class AnimatedScoreCard extends StatelessWidget {
             ),
           ),
           title: Text(
-            'Score: $score',
+            'Skor: $score',
             style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           trailing: Icon(_getIcon(rank), color: _getColor(rank)),
