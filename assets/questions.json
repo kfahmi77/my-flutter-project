@@ -1,0 +1,103 @@
+[
+    {
+      "question": "Apa ibukota Indonesia?",
+      "options": ["Jakarta", "Surabaya", "Bandung", "Medan"],
+      "correctAnswer": "Jakarta"
+    },
+    {
+      "question": "Siapa presiden pertama Indonesia?",
+      "options": ["Soeharto", "B.J. Habibie", "Megawati", "Soekarno"],
+      "correctAnswer": "Soekarno"
+    },
+    {
+      "question": "Gunung tertinggi di Indonesia adalah?",
+      "options": ["Gunung Bromo", "Gunung Merapi", "Puncak Jaya", "Gunung Rinjani"],
+      "correctAnswer": "Puncak Jaya"
+    },
+    {
+      "question": "Pulau terbesar di Indonesia adalah?",
+      "options": ["Sumatera", "Kalimantan", "Sulawesi", "Jawa"],
+      "correctAnswer": "Kalimantan"
+    },
+    {
+      "question": "Apa nama mata uang Indonesia?",
+      "options": ["Rupiah", "Dollar", "Ringgit", "Yen"],
+      "correctAnswer": "Rupiah"
+    },
+    {
+      "question": "Kapan Indonesia merdeka?",
+      "options": ["1945", "1950", "1965", "1970"],
+      "correctAnswer": "1945"
+    },
+    {
+      "question": "Siapa penulis novel 'Laskar Pelangi'?",
+      "options": ["Tere Liye", "Andrea Hirata", "Habiburrahman El Shirazy", "Pramoedya Ananta Toer"],
+      "correctAnswer": "Andrea Hirata"
+    },
+    {
+      "question": "Danau terbesar di Indonesia adalah?",
+      "options": ["Danau Toba", "Danau Singkarak", "Danau Maninjau", "Danau Sentani"],
+      "correctAnswer": "Danau Toba"
+    },
+    {
+      "question": "Hewan khas Pulau Komodo adalah?",
+      "options": ["Komodo", "Orangutan", "Harimau Sumatera", "Anoa"],
+      "correctAnswer": "Komodo"
+    },
+    {
+      "question": "Tari Pendet berasal dari?",
+      "options": ["Bali", "Jawa Barat", "Sumatera Barat", "Papua"],
+      "correctAnswer": "Bali"
+    },
+    {
+      "question": "Candi Borobudur terletak di provinsi?",
+      "options": ["Jawa Tengah", "Jawa Timur", "Bali", "Sumatera Utara"],
+      "correctAnswer": "Jawa Tengah"
+    },
+    {
+      "question": "Siapa pahlawan wanita dari Aceh yang melawan penjajah?",
+      "options": ["Cut Nyak Dien", "Dewi Sartika", "R.A. Kartini", "Martha Christina Tiahahu"],
+      "correctAnswer": "Cut Nyak Dien"
+    },
+    {
+      "question": "Apa julukan negara Indonesia?",
+      "options": ["Negeri Sakura", "Tanah Air", "Negeri Ginseng", "Negeri Kanguru"],
+      "correctAnswer": "Tanah Air"
+    },
+    {
+      "question": "Apa nama istana presiden Indonesia?",
+      "options": ["Istana Negara", "Istana Merdeka", "Istana Bogor", "Istana Yogyakarta"],
+      "correctAnswer": "Istana Merdeka"
+    },
+    {
+      "question": "Sungai terpanjang di Indonesia adalah?",
+      "options": ["Sungai Kapuas", "Sungai Musi", "Sungai Mahakam", "Sungai Bengawan Solo"],
+      "correctAnswer": "Sungai Kapuas"
+    },
+    {
+      "question": "Apa nama lagu kebangsaan Indonesia?",
+      "options": ["Indonesia Raya", "Bagimu Negeri", "Tanah Airku", "Garuda Pancasila"],
+      "correctAnswer": "Indonesia Raya"
+    },
+    {
+      "question": "Pulau Lombok berada di provinsi?",
+      "options": ["Nusa Tenggara Barat", "Bali", "Nusa Tenggara Timur", "Sulawesi Selatan"],
+      "correctAnswer": "Nusa Tenggara Barat"
+    },
+    {
+      "question": "Apa semboyan negara Indonesia?",
+      "options": ["Bhinneka Tunggal Ika", "Merdeka atau Mati", "Satu Nusa Satu Bangsa", "Garuda di Dadaku"],
+      "correctAnswer": "Bhinneka Tunggal Ika"
+    },
+    {
+      "question": "Berapa jumlah provinsi di Indonesia?",
+      "options": ["34", "33", "32", "35"],
+      "correctAnswer": "34"
+    },
+    {
+      "question": "Siapa wakil presiden Indonesia saat ini?",
+      "options": ["Jusuf Kalla", "Ma'ruf Amin", "Megawati Soekarnoputri", "B.J. Habibie"],
+      "correctAnswer": "Ma'ruf Amin"
+    }
+  ]
+  
