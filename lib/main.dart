@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:myapp/animation_text.dart';
+import 'package:myapp/footer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,23 +28,26 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFF64FFDA),
         ),
       ),
-      home: PortfolioHome(),
+      home: const PortfolioHome(),
     );
   }
 }
 
 class PortfolioHome extends StatelessWidget {
+  const PortfolioHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeroSection(),
-            AboutSection(),
-            ExperienceSection(),
+            const HeroSection(),
+            const AboutSection(),
+            const ExperienceSection(),
             WorkSection(),
-            ContactSection(),
+            const ContactSection(),
+            const Footer()
           ],
         ),
       ),
@@ -49,12 +56,14 @@ class PortfolioHome extends StatelessWidget {
 }
 
 class HeroSection extends StatelessWidget {
+  const HeroSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth > 800;
-        return Container(
+        return SizedBox(
           height: isDesktop
               ? MediaQuery.of(context).size.height
               : MediaQuery.of(context).size.height * 0.7,
@@ -84,15 +93,14 @@ class HeroSection extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Khoirul Fahmi',
-                      style:
-                          Theme.of(context).textTheme.displayMedium?.copyWith(
+                    FragileGatherTextAnimation(
+                      text: 'Khoirul Fahmi',
+                      textStyle:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                                fontSize: isDesktop ? null : 36,
+                                fontSize: isDesktop ? 48 : 36,
                               ),
-                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -129,6 +137,8 @@ class HeroSection extends StatelessWidget {
 }
 
 class AboutSection extends StatelessWidget {
+  const AboutSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -178,65 +188,13 @@ class AboutSection extends StatelessWidget {
     );
   }
 
-  Widget _buildAboutContent(BuildContext context, bool isDesktop) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "I'm a passionate Flutter developer and UI/UX expert with a keen eye for creating beautiful, functional, and user-centered digital experiences. With a background in both design and development, I bridge the gap between aesthetics and functionality.",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                height: 1.5,
-                fontSize: isDesktop ? null : 14,
-              ),
-        ),
-        SizedBox(height: isDesktop ? 15 : 10),
-        Text(
-          "My approach combines clean, efficient code with intuitive design principles to deliver apps that not only work flawlessly but also delight users.",
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                height: 1.5,
-                fontSize: isDesktop ? null : 14,
-              ),
-        ),
-        SizedBox(height: isDesktop ? 20 : 15),
-        Wrap(
-          spacing: 6,
-          runSpacing: 6,
-          children: [
-            _buildSkillChip('Flutter'),
-            _buildSkillChip('Dart'),
-            _buildSkillChip('UI/UX'),
-            _buildSkillChip('Firebase'),
-          ],
-        ),
-      ],
-    );
-  }
 
-  Widget _buildProfileImage(bool isDesktop) {
-    return Container(
-      height: isDesktop ? 300 : 200,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(isDesktop ? 20 : 15),
-        image: const DecorationImage(
-          image: NetworkImage(
-              'https://images.unsplash.com/photo-1600172454132-ada7faa002eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
 
-  Widget _buildSkillChip(String label) {
-    return Chip(
-      label: Text(label, style: const TextStyle(fontSize: 12)),
-      backgroundColor: Colors.blueGrey[800],
-      labelStyle: const TextStyle(color: Colors.white),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-    );
-  }
 }
 
 class ExperienceSection extends StatelessWidget {
+  const ExperienceSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -359,6 +317,8 @@ class WorkSection extends StatelessWidget {
     // Add more projects here
   ];
 
+   WorkSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -392,8 +352,7 @@ class ProjectCarousel extends StatelessWidget {
   final bool isDesktop;
 
   const ProjectCarousel(
-      {Key? key, required this.projects, required this.isDesktop})
-      : super(key: key);
+      {super.key, required this.projects, required this.isDesktop});
 
   @override
   Widget build(BuildContext context) {
@@ -417,11 +376,10 @@ class ProjectCard extends StatefulWidget {
   final Project project;
   final bool isDesktop;
 
-  const ProjectCard({Key? key, required this.project, required this.isDesktop})
-      : super(key: key);
+  const ProjectCard({super.key, required this.project, required this.isDesktop});
 
   @override
-  _ProjectCardState createState() => _ProjectCardState();
+   createState() => _ProjectCardState();
 }
 
 class _ProjectCardState extends State<ProjectCard>
@@ -459,7 +417,7 @@ class _ProjectCardState extends State<ProjectCard>
           scale: _animation.value,
           child: child,
         ),
-        child: Container(
+        child: SizedBox(
           width: widget.isDesktop ? 320 : 260,
           child: Card(
             elevation: 10,
@@ -566,6 +524,8 @@ class Project {
 }
 
 class ContactSection extends StatelessWidget {
+  const ContactSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -614,7 +574,6 @@ class ContactSection extends StatelessWidget {
                 onPressed: () {
                   // You can add functionality to open a contact form or modal here
                 },
-                child: const Text('Send a Message'),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Theme.of(context).colorScheme.secondary,
                   backgroundColor: Colors.black,
@@ -622,6 +581,7 @@ class ContactSection extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   textStyle: TextStyle(fontSize: isDesktop ? 18 : 16),
                 ),
+                child: const Text('Send a Message'),
               ),
             ],
           ),
@@ -634,9 +594,10 @@ class ContactSection extends StatelessWidget {
       BuildContext context, IconData icon, String label, String url) {
     return InkWell(
       onTap: () async {
-        if (await canLaunch(url)) {
-          await launch(url);
+        if (await canLaunchUrl(Uri.parse(url))) {
+          await launchUrl(Uri.parse(url));
         } else {
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Could not launch $url')),
           );
