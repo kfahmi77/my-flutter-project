@@ -19,7 +19,7 @@ class Footer extends StatelessWidget {
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.normal,
-                    fontSize: fontSize),
+                    fontSize: fontSize -2),
               ),
               const SizedBox(height: 10),
             ],

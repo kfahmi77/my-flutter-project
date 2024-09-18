@@ -34,19 +34,39 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class PortfolioHome extends StatelessWidget {
+class PortfolioHome extends StatefulWidget {
   const PortfolioHome({super.key});
 
+  @override
+  State<PortfolioHome> createState() => _PortfolioHomeState();
+}
+
+final ScrollController _scrollController = ScrollController();
+final GlobalKey _workSectionKey = GlobalKey();
+
+void _scrollToWorkSection() {
+  final RenderBox renderBox =
+      _workSectionKey.currentContext!.findRenderObject() as RenderBox;
+  final position = renderBox.localToGlobal(Offset.zero);
+  _scrollController.animateTo(
+    position.dy,
+    duration: const Duration(seconds: 1),
+    curve: Curves.easeInOut,
+  );
+}
+
+class _PortfolioHomeState extends State<PortfolioHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
-            const HeroSection(),
+            const HeroSection(onViewWorkPressed: _scrollToWorkSection),
             const AnimatedAboutSection(),
             const AnimatedExperienceSection(),
-            WorkSection(),
+            WorkSection(key: _workSectionKey),
             const ContactSection(),
             const Footer()
           ],
@@ -54,10 +74,18 @@ class PortfolioHome extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 }
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  final VoidCallback onViewWorkPressed;
+
+  const HeroSection({super.key, required this.onViewWorkPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -115,9 +143,9 @@ class HeroSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton.icon(
-                      icon: const Icon(Icons.arrow_downward),
+                      icon: const FaIcon(FontAwesomeIcons.arrowDown),
                       label: const Text('View My Work'),
-                      onPressed: () {},
+                      onPressed: onViewWorkPressed,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
@@ -174,8 +202,17 @@ class WorkSection extends StatelessWidget {
           'It is a 2D action game with unique mechanics, in a dark place, players can only move if there is light. Guide the player to the next stage using the light. Avoid existing monsters, by choosing a safe route It is a 2D action game with unique mechanics, in a dark place, players can only move if there is light. Guide the player to the next stage using the light. Avoid existing monsters, by choosing a safe route',
       technologies: ['Unity', 'C#'],
       imageUrl:
-          'https://img.itch.zone/aW1nLzg0NDg0ODcuanBlZw==/original/uJiwdr.jpeg',
+          'https://raw.githubusercontent.com/kfahmi77/my-flutter-project/940e48ae6afd6c418c43231e0b95dad6b1fd1cec/assets/uJiwdr.jpeg',
       color: const Color.fromARGB(255, 181, 253, 47),
+    ),
+    Project(
+      title: 'MyDaily',
+      description:
+          'Special Note App for students to record their academic activities',
+      technologies: ['Kotlin', 'XML'],
+      imageUrl:
+          'https://play-lh.googleusercontent.com/9aAjYco6oHN4UDHewr4ZNr06UDXQTMaIzGgm0rRIZhPnOLgLxhGUjz9QzhxOGvduuaY=w480-h960',
+      color: const Color.fromARGB(255, 0, 198, 248),
     ),
     // Add more projects here
   ];
@@ -423,11 +460,9 @@ class ContactSection extends StatelessWidget {
                   _buildContactMethod(context, FontAwesomeIcons.envelope,
                       'Email', 'mailto:khoirulfahmi44@gmail.com'),
                   _buildContactMethod(context, FontAwesomeIcons.linkedin,
-                      'LinkedIn', 'https://www.linkedin.com/in/yourprofile'),
+                      'LinkedIn', 'https://www.linkedin.com/in/khoirul-fahmi'),
                   _buildContactMethod(context, FontAwesomeIcons.github,
                       'GitHub', 'https://github.com/kfahmi77'),
-                  _buildContactMethod(context, FontAwesomeIcons.twitter,
-                      'Twitter', 'https://twitter.com/yourusername'),
                 ],
               ),
             ],
