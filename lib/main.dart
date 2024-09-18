@@ -146,24 +146,36 @@ class WorkSection extends StatelessWidget {
       description: 'Note App for record the child\'s growth and development',
       technologies: ['Flutter', 'Firebase', 'GetX'],
       imageUrl:
-          'https://images.unsplash.com/photo-1613679074971-91fc27180061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80',
+          'https://raw.githubusercontent.com/kfahmi77/my-flutter-project/portofolio/assets/Screenshot%202024-09-18%20at%2019.36.28.png',
       color: const Color.fromARGB(255, 255, 0, 98),
     ),
     Project(
-      title: 'EcoMarket',
-      description: 'E-commerce platform for eco-friendly products',
-      technologies: ['Flutter', 'AR Kit', 'Stripe'],
+      title: 'Hangman',
+      description: 'Puzzle App for solving word before moving running out',
+      technologies: [
+        'Flutter',
+        'SQlite',
+      ],
       imageUrl:
-          'https://images.unsplash.com/photo-1535868463750-c78d9543614f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80',
-      color: const Color(0xFF00C853),
+          'https://raw.githubusercontent.com/kfahmi77/my-flutter-project/portofolio/assets/Screenshot%202024-09-18%20at%2019.36.48.png',
+      color: const Color.fromARGB(255, 76, 0, 255),
     ),
     Project(
-      title: 'MindfulMoments',
-      description: 'Meditation and mindfulness app',
-      technologies: ['Flutter', 'Firebase', 'Provider'],
+      title: 'GeoFace',
+      description: 'Attendance App using TFlite for face identification',
+      technologies: ['Flutter', 'Laravel', 'Bloc'],
       imageUrl:
-          'https://images.unsplash.com/photo-1535868463750-c78d9543614f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80',
-      color: const Color(0xFFFF5722),
+          'https://raw.githubusercontent.com/kfahmi77/face_attendance/main/assets/screenshots/Homepage.png',
+      color: const Color.fromARGB(255, 70, 142, 250),
+    ),
+    Project(
+      title: 'A Dark Pathway',
+      description:
+          'It is a 2D action game with unique mechanics, in a dark place, players can only move if there is light. Guide the player to the next stage using the light. Avoid existing monsters, by choosing a safe route It is a 2D action game with unique mechanics, in a dark place, players can only move if there is light. Guide the player to the next stage using the light. Avoid existing monsters, by choosing a safe route',
+      technologies: ['Unity', 'C#'],
+      imageUrl:
+          'https://img.itch.zone/aW1nLzg0NDg0ODcuanBlZw==/original/uJiwdr.jpeg',
+      color: const Color.fromARGB(255, 181, 253, 47),
     ),
     // Add more projects here
   ];
